@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,198 +11,686 @@
 <meta name="theme-color" content="#17171d">
 <title>Sikis Sokus</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
 <style>
 html,body{margin:0;padding:0;width:100%;min-height:100%;overflow-x:hidden}
 html{min-height:100vh;min-height:100dvh}
-body{font-family:system-ui,Arial,sans-serif;background:#fff;color:#17171d;min-height:100vh;min-height:100dvh;-webkit-tap-highlight-color:transparent;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+body{
+ font-family:system-ui,Arial,sans-serif;
+ background:#fff;color:#17171d;
+ min-height:100vh;min-height:100dvh;
+ -webkit-tap-highlight-color:transparent;
+ padding-left:env(safe-area-inset-left);
+ padding-right:env(safe-area-inset-right)
+}
 .hidden{display:none!important}
-#homeView,#restaurantView,#myDealsView{width:100%;min-height:100vh;min-height:100dvh}
+#homeView,#restaurantView,#myDealsView{
+ width:100%;min-height:100vh;min-height:100dvh
+}
 .slide-up{transform:translateY(100%);transition:transform .35s ease}
 .slide-up.active{transform:translateY(0)}
 .deal-tab.active{background:linear-gradient(90deg,#fa4548,#ff7132);color:white}
 .deal-tab{transition:.2s}
 .nav-btn.active{color:#f65b23;background:#f1f1f5}
-.deal-card{background:#fff;border:1px solid #d7dce6;border-radius:24px;overflow:hidden;box-shadow:0 6px 20px #26395712}
+.deal-card{
+ background:#fff;border:1px solid #d7dce6;
+ border-radius:24px;overflow:hidden;
+ box-shadow:0 6px 20px #26395712
+}
 nav.fixed{bottom:max(12px,env(safe-area-inset-bottom))}
+
 @media(max-width:768px){
  #restaurantGrid{grid-template-columns:1fr}
  #homeView,#restaurantView,#myDealsView{max-width:100%}
 }
+
+/* NEW RATING EXPERIENCE */
+#ratingView{
+ position:fixed;inset:0;z-index:60;
+ overflow-y:auto;
+ background:#f3f4f9;
+ color:#25262c;
+ padding:0 16px max(28px,env(safe-area-inset-bottom));
+}
+.rating-shell{
+ max-width:620px;
+ margin:0 auto;
+ padding-top:max(48px,env(safe-area-inset-top));
+ padding-bottom:28px;
+}
+.rating-heading{
+ display:flex;align-items:baseline;
+ justify-content:space-between;
+ gap:8px;margin:22px 0 30px;
+}
+.rating-heading h1{
+ font-size:clamp(29px,7vw,43px);
+ font-weight:900;
+ letter-spacing:-1.5px;
+ line-height:1.1;
+}
+.rating-progress{
+ font-size:16px;font-weight:800;
+ white-space:nowrap;
+}
+.rating-progress span{color:#9699a6}
+.rating-group{margin-bottom:37px}
+.rating-label{
+ display:flex;align-items:baseline;
+ gap:9px;margin-bottom:21px;
+ font-size:19px;
+}
+.rating-icon{
+ font-size:20px;
+ width:27px;
+ text-align:center;
+ flex-shrink:0;
+}
+.rating-name{font-weight:800}
+.rating-subtitle{
+ font-size:14px;color:#9498a6;
+ font-weight:500;
+}
+.rating-subtitle.chosen{
+ color:#27282e;font-weight:700;
+}
+.emoji-track{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ position:relative;
+ padding:0 5px;
+}
+.emoji-track::before{
+ content:"";
+ position:absolute;
+ left:11%;right:11%;top:50%;
+ height:4px;background:#e0e2e8;
+ transform:translateY(-50%);
+ z-index:0;
+ border-radius:8px;
+}
+.emoji-fill{
+ position:absolute;
+ left:11%;top:50%;
+ height:4px;width:0;
+ background:#ff571b;
+ transform:translateY(-50%);
+ z-index:1;
+ transition:width .2s;
+}
+.emoji-button{
+ width:clamp(48px,12vw,64px);
+ height:clamp(48px,12vw,64px);
+ flex-shrink:0;
+ display:flex;align-items:center;
+ justify-content:center;
+ border:1.5px solid #e2e3e8;
+ background:#fff;
+ border-radius:50%;
+ position:relative;z-index:2;
+ font-size:clamp(25px,6vw,34px);
+ box-shadow:0 1px 2px #00000008;
+ transition:transform .15s,border-color .15s;
+}
+.emoji-button:active{transform:scale(.95)}
+.emoji-button.selected{
+ border:3px solid #fb571c;
+ transform:scale(1.15);
+ box-shadow:0 5px 13px #00000012;
+ z-index:4;
+}
+.emoji-button.dimmed .emoji-face{
+ filter:grayscale(1);
+ opacity:.6;
+}
+.emoji-button.passed{
+ border-color:#858585;
+}
+.emoji-button.selected .emoji-face{
+ filter:none;opacity:1;
+}
+.rating-extra{
+ margin-top:49px;
+ background:#fff;
+ border:1px solid #dedfe6;
+ border-radius:20px;
+ padding:18px;
+}
+#reviewTextNew{
+ width:100%;
+ min-height:66px;
+ resize:vertical;
+ border:0;outline:0;
+ font-family:inherit;
+ font-size:17px;
+ font-weight:600;
+ line-height:1.4;
+ color:#282a31;
+ background:transparent;
+}
+#reviewTextNew::placeholder{color:#969a9c}
+.photo-add{
+ display:flex;align-items:center;gap:12px;
+ font-size:17px;font-weight:800;
+ padding:6px 0;
+}
+.camera-symbol{
+ width:38px;height:38px;
+ background:#fff0e9;
+ border-radius:50%;
+ color:#f75b1a;
+ display:flex;align-items:center;
+ justify-content:center;
+ font-size:21px;
+}
+#photoPreviews{
+ display:flex;flex-wrap:wrap;gap:8px;
+ margin-top:10px;
+}
+.photo-preview{
+ position:relative;width:64px;height:64px;
+}
+.photo-preview img{
+ width:100%;height:100%;
+ object-fit:cover;border-radius:10px;
+}
+.photo-preview button{
+ position:absolute;top:-7px;right:-7px;
+ width:22px;height:22px;
+ background:#222;color:white;
+ border-radius:50%;font-size:13px;
+}
+.saved-line{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ margin:21px 3px;
+ font-weight:800;
+}
+.saved-line .saved-caption{color:#9398a6}
+.saved-line button{
+ color:#f45b20;font-weight:800;
+}
+.savings-control{
+ padding:10px 6px 25px;
+}
+.savings-value{
+ text-align:center;
+ font-size:17px;font-weight:900;
+ color:#fff;
+ background:#ff571b;
+ width:max-content;
+ min-width:70px;
+ padding:6px 12px;
+ border-radius:12px;
+ margin:0 auto 15px;
+}
+#savingsSlider{
+ width:100%;
+ accent-color:#ff571b;
+ cursor:pointer;
+}
+.savings-ends{
+ display:flex;
+ justify-content:space-between;
+ color:#a0a4b0;
+ font-size:13px;
+ font-weight:700;
+}
+.rating-submit{
+ width:100%;
+ border-radius:999px;
+ padding:17px 12px;
+ color:white;
+ font-size:20px;
+ font-weight:900;
+ background:linear-gradient(90deg,#f64649,#ff6937);
+}
+.rating-submit:disabled{
+ background:#d5d8df;
+ cursor:not-allowed;
+}
+.rate-later{
+ display:block;
+ margin:15px auto 0;
+ font-size:19px;
+ font-weight:850;
+ padding:7px 20px;
+}
+.rating-toast{
+ position:fixed;
+ top:max(28px,env(safe-area-inset-top));
+ left:50%;transform:translateX(-50%);
+ z-index:90;
+ background:#2c2c2e;
+ color:white;
+ border-radius:22px;
+ padding:13px 18px;
+ width:min(92%,450px);
+ display:flex;align-items:center;
+ gap:12px;
+ font-size:17px;font-weight:800;
+ box-shadow:0 10px 30px #0003;
+}
+.rating-toast-check{
+ width:40px;height:40px;
+ display:flex;align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ background:#ff5a00;
+ flex-shrink:0;
+ font-size:23px;
+}
+#photoSheet{
+ position:fixed;inset:0;z-index:80;
+ background:#0005;
+ display:flex;align-items:flex-end;
+ justify-content:center;
+ padding:12px;
+}
+.photo-sheet-content{width:min(100%,500px)}
+.photo-sheet-main{
+ background:#414145;
+ color:#fff;
+ border-radius:16px;
+ overflow:hidden;
+ text-align:center;
+}
+.photo-sheet-main p{
+ padding:17px;
+ color:#ddd;
+ font-size:14px;
+ font-weight:700;
+}
+.photo-sheet-main button{
+ width:100%;padding:19px 10px;
+ border-top:1px solid #ffffff24;
+ color:#ff632b;
+ font-size:20px;font-weight:850;
+}
+.photo-sheet-cancel{
+ background:#29292c;
+ border-radius:15px;
+ width:100%;padding:18px;
+ color:#ff632b;
+ font-size:20px;font-weight:850;
+ margin-top:9px;
+}
+
+/* THANK YOU SCREEN */
+#thanksView{
+ position:fixed;inset:0;
+ z-index:70;
+ overflow-y:auto;
+ background:linear-gradient(155deg,#f23235,#ff4e00 68%,#ff641e);
+ color:#fff;
+}
+.thanks-shell{
+ max-width:620px;
+ min-height:100dvh;
+ margin:0 auto;
+ display:flex;
+ flex-direction:column;
+ padding-top:max(72px,env(safe-area-inset-top));
+}
+.thanks-intro{
+ text-align:center;
+ padding:0 24px;
+}
+.thanks-intro h1{
+ font-size:clamp(30px,7vw,45px);
+ font-weight:900;
+ line-height:1.1;
+ letter-spacing:-1px;
+}
+.thanks-intro p{
+ font-size:17px;
+ font-weight:700;
+ line-height:1.5;
+ margin-top:20px;
+ color:#fff9;
+}
+.thanks-stats{
+ display:flex;
+ align-items:center;
+ justify-content:space-around;
+ gap:16px;
+ padding:90px 15px 80px;
+}
+.thanks-number{
+ font-size:clamp(64px,19vw,130px);
+ font-weight:950;
+ line-height:1;
+}
+.thanks-stat-label{
+ font-size:18px;
+ font-weight:800;
+ text-align:center;
+ margin-top:15px;
+}
+.thanks-savings{
+ font-size:clamp(32px,9vw,57px);
+ font-weight:900;
+ line-height:1;
+}
+.thanks-bottom{
+ background:#f3f4f9;
+ color:#26272e;
+ border-radius:30px 30px 0 0;
+ margin-top:auto;
+ padding:22px 16px max(25px,env(safe-area-inset-bottom));
+}
+.thanks-bottom-header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:17px;
+}
+.thanks-bottom-header h2{
+ font-size:23px;font-weight:900;
+}
+.thanks-bottom-header button{
+ color:#f65b20;font-weight:850;
+ font-size:16px;
+}
+.pending-card{
+ background:#fff;
+ border:1px solid #dce0e7;
+ border-radius:18px;
+ padding:9px;
+ display:flex;align-items:center;
+ gap:12px;
+ margin-bottom:10px;
+}
+.pending-card img{
+ width:60px;height:60px;
+ object-fit:cover;
+ border-radius:15px;
+ flex-shrink:0;
+}
+.pending-card-details{
+ min-width:0;flex:1;
+}
+.pending-card-details strong{
+ display:block;
+ font-size:16px;
+ overflow:hidden;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+.pending-card-details small{
+ display:block;
+ color:#969baa;
+ font-size:12px;
+ font-weight:700;
+ margin-top:3px;
+}
+.pending-card button{
+ color:#f45c22;
+ background:#ffebe3;
+ border-radius:999px;
+ padding:10px 13px;
+ font-weight:900;
+}
+.thanks-done{
+ width:100%;
+ margin-top:18px;
+ background:linear-gradient(90deg,#f74648,#ff6838);
+ color:#fff;
+ border-radius:999px;
+ padding:17px;
+ font-size:21px;
+ font-weight:900;
+}
 </style>
 </head>
+
 <body>
 
 <!-- HOME -->
 <div id="homeView" class="pb-28">
-  <header class="bg-gradient-to-br from-slate-900 via-zinc-900 to-neutral-900 text-white px-6 pt-10 pb-9 rounded-b-[36px] shadow-xl">
-    <div class="max-w-4xl mx-auto">
-      <div class="flex justify-between items-center mb-7">
-        <span class="bg-white/10 border border-white/10 text-orange-400 rounded-full px-4 py-2 text-sm font-bold">🟠 Brno Hub</span>
-        <span class="bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-1 rounded-full font-black">VIP</span>
-      </div>
-      <h1 class="text-4xl font-black">sikis sokus</h1>
-      <p class="text-gray-400 text-sm mt-2">Select a restaurant to unlock exclusive perks & menus</p>
-    </div>
-  </header>
-  <div id="restaurantGrid" class="max-w-4xl mx-auto p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+<header class="bg-gradient-to-br from-slate-900 via-zinc-900 to-neutral-900 text-white px-6 pt-10 pb-9 rounded-b-[36px] shadow-xl">
+<div class="max-w-4xl mx-auto">
+<div class="flex justify-between items-center mb-7">
+<span class="bg-white/10 border border-white/10 text-orange-400 rounded-full px-4 py-2 text-sm font-bold">🟠 Brno Hub</span>
+<span class="bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-1 rounded-full font-black">VIP</span>
+</div>
+<h1 class="text-4xl font-black">sikis sokus</h1>
+<p class="text-gray-400 text-sm mt-2">Select a restaurant to unlock exclusive perks & menus</p>
+</div>
+</header>
+<div id="restaurantGrid" class="max-w-4xl mx-auto p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 </div>
 
 <!-- RESTAURANT DETAIL -->
 <div id="restaurantView" class="hidden pb-28">
-  <div class="relative h-96 bg-slate-900">
-    <img id="restBanner" class="w-full h-full object-cover">
-    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/20"></div>
-    <button onclick="showHome()" class="absolute top-5 left-5 bg-black/50 text-white rounded-full w-11 h-11 text-2xl">‹</button>
-    <div class="absolute bottom-7 left-6 right-6 text-white">
-      <h1 id="restName" class="text-3xl font-extrabold"></h1>
-      <p id="restCategory" class="text-gray-200 mt-1"></p>
-      <p class="text-sm mt-2">
-        <span class="text-amber-400">★★★★★</span>
-        <span id="restRating"></span> •
-        <span id="restDistance"></span> •
-        <span class="text-green-400">Open</span>
-      </p>
-    </div>
-  </div>
+<div class="relative h-96 bg-slate-900">
+<img id="restBanner" class="w-full h-full object-cover">
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/20"></div>
+<button onclick="showHome()" class="absolute top-5 left-5 bg-black/50 text-white rounded-full w-11 h-11 text-2xl">‹</button>
+<div class="absolute bottom-7 left-6 right-6 text-white">
+<h1 id="restName" class="text-3xl font-extrabold"></h1>
+<p id="restCategory" class="text-gray-200 mt-1"></p>
+<p class="text-sm mt-2">
+<span class="text-amber-400">★★★★★</span>
+<span id="restRating"></span> •
+<span id="restDistance"></span> •
+<span class="text-green-400">Open</span>
+</p>
+</div>
+</div>
 
-  <main class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
-    <div class="bg-gray-100 rounded-full p-1 flex max-w-md">
-      <button class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-rose-500 text-white rounded-full font-bold">Deals & more</button>
-      <button class="flex-1 py-3 text-gray-500 font-bold rounded-full">Menu</button>
-    </div>
-    <div id="restDeals" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+<main class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
+<div class="bg-gray-100 rounded-full p-1 flex max-w-md">
+<button class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-rose-500 text-white rounded-full font-bold">Deals & more</button>
+<button class="flex-1 py-3 text-gray-500 font-bold rounded-full">Menu</button>
+</div>
+<div id="restDeals" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
-    <section class="border-t pt-6">
-      <h3 class="text-xs font-bold tracking-wider text-gray-400">RATINGS AND REVIEWS</h3>
-      <div class="flex items-center gap-3 mt-3">
-        <span id="avgRatingNum" class="text-3xl font-black"></span>
-        <div>
-          <div class="text-amber-400">★★★★★</div>
-          <p id="totalRatingsCount" class="text-xs text-gray-400"></p>
-        </div>
-      </div>
-      <div class="bg-gray-50 p-4 rounded-2xl mt-4 text-sm">
-        <b>Honza K.</b>
-        <p class="text-amber-400">★★★★★</p>
-        <p>super!!</p>
-      </div>
-      <div class="bg-gray-50 p-4 rounded-2xl mt-3 text-sm">
-        <b>Jakub P.</b>
-        <p class="text-amber-400">★★★★★</p>
-        <p>super! 🍯</p>
-      </div>
-      <div class="bg-gray-50 p-4 rounded-2xl mt-3 text-sm">
-        <b>Veronika B.</b>
-        <p class="text-amber-400">★★★★★</p>
-        <p>mega bengr</p>
-      </div>
-    </section>
+<section class="border-t pt-6">
+<h3 class="text-xs font-bold tracking-wider text-gray-400">RATINGS AND REVIEWS</h3>
+<div class="flex items-center gap-3 mt-3">
+<span id="avgRatingNum" class="text-3xl font-black"></span>
+<div>
+<div class="text-amber-400">★★★★★</div>
+<p id="totalRatingsCount" class="text-xs text-gray-400"></p>
+</div>
+</div>
+<div class="bg-gray-50 p-4 rounded-2xl mt-4 text-sm">
+<b>Honza K.</b>
+<p class="text-amber-400">★★★★★</p>
+<p>super!!</p>
+</div>
+<div class="bg-gray-50 p-4 rounded-2xl mt-3 text-sm">
+<b>Jakub P.</b>
+<p class="text-amber-400">★★★★★</p>
+<p>super! 🍯</p>
+</div>
+<div class="bg-gray-50 p-4 rounded-2xl mt-3 text-sm">
+<b>Veronika B.</b>
+<p class="text-amber-400">★★★★★</p>
+<p>mega bengr</p>
+</div>
+</section>
 
-    <section class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t pt-6">
-      <div>
-        <h3 class="text-xs font-bold text-gray-400">OPENING HOURS</h3>
-        <p id="restHours" class="mt-2 text-sm"></p>
-      </div>
-      <div>
-        <h3 class="text-xs font-bold text-gray-400">ADDRESS</h3>
-        <p id="restAddress" class="mt-2 text-sm"></p>
-      </div>
-    </section>
+<section class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t pt-6">
+<div>
+<h3 class="text-xs font-bold text-gray-400">OPENING HOURS</h3>
+<p id="restHours" class="mt-2 text-sm"></p>
+</div>
+<div>
+<h3 class="text-xs font-bold text-gray-400">ADDRESS</h3>
+<p id="restAddress" class="mt-2 text-sm"></p>
+</div>
+</section>
 
-    <a id="restMapLink" target="_blank" rel="noopener noreferrer" class="block border rounded-3xl overflow-hidden bg-gray-100 p-8 text-center font-bold text-orange-600">
-      📍 Open restaurant in Google Maps
-    </a>
-  </main>
+<a id="restMapLink" target="_blank" rel="noopener noreferrer" class="block border rounded-3xl overflow-hidden bg-gray-100 p-8 text-center font-bold text-orange-600">
+📍 Open restaurant in Google Maps
+</a>
+</main>
 </div>
 
 <!-- MY DEALS -->
 <div id="myDealsView" class="hidden bg-[#f3f4f9] min-h-screen pb-32">
-  <div class="max-w-4xl mx-auto px-4 pt-10">
-    <h1 class="text-4xl font-black mb-7">My deals</h1>
-    <div class="sticky top-0 z-20 bg-[#f3f4f9] py-2">
-      <div class="bg-white rounded-full p-1 flex shadow-sm">
-        <button id="bookedTab" onclick="switchDealsTab('booked')" class="deal-tab active flex-1 rounded-full py-3 font-bold">
-          Booked <span id="bookedCount">0</span>
-        </button>
-        <button id="redeemedTab" onclick="switchDealsTab('redeemed')" class="deal-tab flex-1 rounded-full py-3 font-bold">
-          Redeemed <span id="redeemedCount">0</span>
-        </button>
-      </div>
-    </div>
+<div class="max-w-4xl mx-auto px-4 pt-10">
+<h1 class="text-4xl font-black mb-7">My deals</h1>
+<div class="sticky top-0 z-20 bg-[#f3f4f9] py-2">
+<div class="bg-white rounded-full p-1 flex shadow-sm">
+<button id="bookedTab" onclick="switchDealsTab('booked')" class="deal-tab active flex-1 rounded-full py-3 font-bold">
+Booked <span id="bookedCount">0</span>
+</button>
+<button id="redeemedTab" onclick="switchDealsTab('redeemed')" class="deal-tab flex-1 rounded-full py-3 font-bold">
+Redeemed <span id="redeemedCount">0</span>
+</button>
+</div>
+</div>
 
-    <div id="bookedTip" class="bg-[#e9ebf4] rounded-3xl p-5 my-5 text-sm font-semibold leading-relaxed shadow-sm">
-      💡 When you arrive at the restaurant, mention your booking. Apply the deal while paying. Only one deal can be used per table.
-      <p class="text-xs text-gray-500 mt-2">Demo bookings are not valid restaurant discounts.</p>
-    </div>
-
-    <div id="myDealsList" class="space-y-5"></div>
-  </div>
+<div id="bookedTip" class="bg-[#e9ebf4] rounded-3xl p-5 my-5 text-sm font-semibold leading-relaxed shadow-sm">
+💡 When you arrive at the restaurant, mention your booking. Apply the deal while paying. Only one deal can be used per table.
+<p class="text-xs text-gray-500 mt-2">Demo bookings are not valid restaurant discounts.</p>
+</div>
+<div id="myDealsList" class="space-y-5"></div>
+</div>
 </div>
 
 <!-- BOTTOM NAVIGATION -->
 <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 z-30 bg-white/95 border border-gray-200 shadow-xl rounded-full p-1 flex w-[min(92%,390px)]">
-  <button id="navAccount" onclick="showHome()" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center text-xs font-bold">
-    <span class="text-2xl">◉</span>Home
-  </button>
-  <button id="navExplore" onclick="showHome()" class="nav-btn active flex-1 py-3 rounded-full flex flex-col items-center text-xs font-bold">
-    <span class="text-2xl">◈</span>Explore
-  </button>
-  <button id="navDeals" onclick="showMyDeals()" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center text-xs font-bold">
-    <span class="text-2xl">◇</span>My deals
-  </button>
+<button id="navAccount" onclick="showHome()" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center text-xs font-bold">
+<span class="text-2xl">◉</span>Home
+</button>
+<button id="navExplore" onclick="showHome()" class="nav-btn active flex-1 py-3 rounded-full flex flex-col items-center text-xs font-bold">
+<span class="text-2xl">◈</span>Explore
+</button>
+<button id="navDeals" onclick="showMyDeals()" class="nav-btn flex-1 py-3 rounded-full flex flex-col items-center text-xs font-bold">
+<span class="text-2xl">◇</span>My deals
+</button>
 </nav>
 
-<!-- REDEMPTION MODAL -->
+<!-- ORIGINAL REDEMPTION MODAL -->
 <div id="dealModal" class="hidden fixed inset-0 z-40 bg-black/60 flex items-end sm:items-center justify-center">
-  <div id="dealModalContent" class="slide-up w-full max-w-md bg-gradient-to-b from-rose-500 to-orange-600 rounded-t-[32px] sm:rounded-[32px] p-4 max-h-[92vh] overflow-y-auto">
-    <h2 class="text-white text-center font-bold py-2">DEAL REDEMPTION</h2>
-    <div class="bg-white rounded-3xl overflow-hidden">
-      <div class="relative h-36">
-        <img id="modalBanner" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-        <div class="absolute bottom-3 left-4 text-white">
-          <h3 id="modalRestTitle" class="font-black"></h3>
-          <p id="modalRestCat" class="text-xs"></p>
-        </div>
-      </div>
-      <div class="p-5">
-        <h3 id="modalDealTitle" class="text-xl font-black"></h3>
-        <p id="modalDealDesc" class="text-sm text-gray-500 mt-2"></p>
-        <div class="bg-orange-50 rounded-2xl p-3 mt-4 text-xs flex justify-between">
-          <span id="currentDateBadge"></span>
-          <span id="modalHours"></span>
-        </div>
-        <div id="swipeTrack" class="relative mt-6 h-14 rounded-full bg-gray-100 overflow-hidden select-none">
-          <div id="swipeFill" class="absolute top-0 bottom-0 left-0 bg-green-100" style="width:0"></div>
-          <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400">Swipe to redeem DEAL →</span>
-          <div id="swipeThumb" class="absolute top-1.5 left-1.5 h-11 w-11 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg z-10 cursor-grab" style="touch-action:none">✓</div>
-        </div>
-      </div>
-    </div>
-    <button onclick="closeDealModal()" class="w-full py-3 text-white font-bold">Close</button>
-  </div>
+<div id="dealModalContent" class="slide-up w-full max-w-md bg-gradient-to-b from-rose-500 to-orange-600 rounded-t-[32px] sm:rounded-[32px] p-4 max-h-[92vh] overflow-y-auto">
+<h2 class="text-white text-center font-bold py-2">DEAL REDEMPTION</h2>
+<div class="bg-white rounded-3xl overflow-hidden">
+<div class="relative h-36">
+<img id="modalBanner" class="w-full h-full object-cover">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-3 left-4 text-white">
+<h3 id="modalRestTitle" class="font-black"></h3>
+<p id="modalRestCat" class="text-xs"></p>
+</div>
+</div>
+<div class="p-5">
+<h3 id="modalDealTitle" class="text-xl font-black"></h3>
+<p id="modalDealDesc" class="text-sm text-gray-500 mt-2"></p>
+<div class="bg-orange-50 rounded-2xl p-3 mt-4 text-xs flex justify-between">
+<span id="currentDateBadge"></span>
+<span id="modalHours"></span>
+</div>
+<div id="swipeTrack" class="relative mt-6 h-14 rounded-full bg-gray-100 overflow-hidden select-none">
+<div id="swipeFill" class="absolute top-0 bottom-0 left-0 bg-green-100" style="width:0"></div>
+<span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-400">Swipe to redeem DEAL →</span>
+<div id="swipeThumb" class="absolute top-1.5 left-1.5 h-11 w-11 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg z-10 cursor-grab" style="touch-action:none">✓</div>
+</div>
+</div>
+</div>
+<button onclick="closeDealModal()" class="w-full py-3 text-white font-bold">Close</button>
+</div>
 </div>
 
-<!-- SUCCESS MODAL -->
-<div id="successModal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-  <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
-    <div class="mx-auto border-4 border-green-500 rounded-full w-16 h-16 flex items-center justify-center text-green-500 text-3xl">✓</div>
-    <h2 class="text-2xl font-black mt-4">Successfully applied</h2>
-    <p class="text-gray-500 text-xs mt-2">How did you like it?</p>
-    <div id="starContainer" class="flex justify-center gap-2 my-5">
-      <button onclick="rateStars(1)" class="text-3xl text-gray-200">★</button>
-      <button onclick="rateStars(2)" class="text-3xl text-gray-200">★</button>
-      <button onclick="rateStars(3)" class="text-3xl text-gray-200">★</button>
-      <button onclick="rateStars(4)" class="text-3xl text-gray-200">★</button>
-      <button onclick="rateStars(5)" class="text-3xl text-gray-200">★</button>
-    </div>
-    <textarea id="reviewText" rows="3" placeholder="Tell us your experience..." class="w-full bg-gray-50 border rounded-2xl p-3 text-sm"></textarea>
-    <button onclick="completeRedemption()" class="w-full bg-gradient-to-r from-orange-500 to-rose-500 rounded-full text-white font-bold py-3 mt-5">Continue</button>
-  </div>
+<!-- NEW RATING SCREEN -->
+<div id="ratingView" class="hidden">
+<div class="rating-shell">
+<div class="rating-heading">
+<h1>How did you like it?</h1>
+<div class="rating-progress"><b id="ratingCount">0</b> <span>of 3</span></div>
+</div>
+
+<div id="ratingGroups"></div>
+
+<div class="rating-extra">
+<textarea id="reviewTextNew" placeholder="Tell us about your experience (optional) 😇"></textarea>
+<button class="photo-add" onclick="openPhotoSheet()">
+<span class="camera-symbol">📷</span>
+<span>Add photos</span>
+</button>
+<div id="photoPreviews"></div>
+</div>
+
+<div class="saved-line">
+<div>
+<span class="saved-caption">▤ Saved </span>
+<span id="savedAmountLabel">90 Kč</span>
+</div>
+<button id="savingsToggle" onclick="toggleSavings()">Was it less?</button>
+</div>
+
+<div id="savingsControl" class="savings-control hidden">
+<div id="savingsValue" class="savings-value">90 Kč</div>
+<input id="savingsSlider" type="range" min="0" max="90" step="1" value="90" oninput="updateSavings(this.value)">
+<div class="savings-ends">
+<span>0 Kč</span>
+<span id="savingsMax">90 Kč</span>
+</div>
+</div>
+
+<button id="sendRatingBtn" class="rating-submit" onclick="submitRating()" disabled>Send rating</button>
+<button class="rate-later" onclick="rateLater()">Rate later</button>
+</div>
+</div>
+
+<!-- PHOTO CHOICE SHEET -->
+<div id="photoSheet" class="hidden" onclick="closePhotoSheet(event)">
+<div class="photo-sheet-content">
+<div class="photo-sheet-main">
+<p>Add photos to your rating<br>You can add <span id="remainingPhotos">5</span> more photos.</p>
+<button onclick="choosePhoto('camera')">Take a photo</button>
+<button onclick="choosePhoto('library')">Choose from library</button>
+</div>
+<button class="photo-sheet-cancel" onclick="closePhotoSheet()">Cancel</button>
+</div>
+</div>
+<input type="file" id="photoInput" accept="image/*" multiple class="hidden" onchange="handlePhotos(this.files)">
+<input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhotos(this.files)">
+
+<!-- SUCCESS TOAST -->
+<div id="ratingToast" class="rating-toast hidden">
+<span class="rating-toast-check">✓</span>
+<span>Successfully applied</span>
+</div>
+
+<!-- THANK YOU SCREEN -->
+<div id="thanksView" class="hidden">
+<div class="thanks-shell">
+<div class="thanks-intro">
+<h1>Thanks for helping<br>others</h1>
+<p>Your rating of <strong id="thanksRestaurantName"></strong> will help them choose where to go.</p>
+</div>
+
+<div class="thanks-stats">
+<div>
+<div class="thanks-number" id="totalRatingsStat">1</div>
+<div class="thanks-stat-label">ratings</div>
+</div>
+<div>
+<div class="thanks-savings" id="totalSavingsStat">0</div>
+<div class="thanks-stat-label">Kč saved</div>
+</div>
+</div>
+
+<div class="thanks-bottom">
+<div class="thanks-bottom-header">
+<h2>Still to rate</h2>
+<button onclick="showAllPendingRatings()">All (<span id="pendingCount">0</span>) ›</button>
+</div>
+<div id="pendingRatingsList"></div>
+<button class="thanks-done" onclick="finishThanks()">Done</button>
+</div>
+</div>
 </div>
 
 <script>
-// ORIGINAL RESTAURANT DATA AND IMAGE URLS
 const restaurants = {
  "bk-nadrazi": {
   name:"Burger King - Nádražní 654/10",
@@ -255,8 +744,6 @@ const restaurants = {
    {title:"Discount 30%",desc:"You will get 30% discount on the entire bill.",save:"Save up to 999 Kč"}
   ]
  },
-
- // NEW RESTAURANT 1: PIXIE MATCHA & BAR
  "pixie-matcha-bar": {
   name:"PIXIE Matcha & Bar",
   category:"HOT Deal • Coffee • Matcha • Desserts",
@@ -287,8 +774,6 @@ const restaurants = {
    }
   ]
  },
-
- // NEW RESTAURANT 2: MR. POKE BRNO
  "mr-poke-brno": {
   name:"MR. POKE BRNO",
   category:"HOT Deal • Asian • Bowls • Desserts",
@@ -321,58 +806,56 @@ const restaurants = {
  }
 };
 
-const $ = id => document.getElementById(id);
-const STORAGE_KEY = "sikis_sokus_deals_v1";
-let currentKey = null;
-let selectedDealId = null;
-let selectedRating = 0;
-let dealsTab = "booked";
-let dealHistory = [];
+const $=id=>document.getElementById(id);
+const STORAGE_KEY="sikis_sokus_deals_v1";
+let currentKey=null;
+let selectedDealId=null;
+let selectedRating=0;
+let dealsTab="booked";
+let dealHistory=[];
+let ratingValues={food:0,atmosphere:0,service:0};
+let ratingPhotos=[];
+let ratingPhotoURLs=[];
+let ratingSavings=0;
+let ratingSavingsMax=0;
+let currentRatingDealId=null;
+let showAllPending=false;
 
-try {
- const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
- if(Array.isArray(saved)) dealHistory = saved;
-} catch(e) {
- dealHistory = [];
-}
+try{
+ const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+ if(Array.isArray(saved))dealHistory=saved;
+}catch(e){dealHistory=[]}
 
 function saveHistory(){
- try {localStorage.setItem(STORAGE_KEY,JSON.stringify(dealHistory));}
- catch(e){console.warn("Local storage unavailable",e);}
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(dealHistory))}
+ catch(e){console.warn("Local storage unavailable",e)}
 }
-
 function escapeHTML(value){
- return String(value).replace(/[&<>"']/g, c => ({
+ return String(value).replace(/[&<>"']/g,c=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",
   '"':"&quot;","'":"&#39;"
  }[c]));
 }
-
 function formatDate(value){
- const d = new Date(value);
- return d.toLocaleDateString("cs-CZ");
+ return new Date(value).toLocaleDateString("cs-CZ");
 }
 function formatTime(value){
  return new Date(value).toLocaleTimeString("cs-CZ",{
   hour:"2-digit",minute:"2-digit"
  });
 }
-
 function navigate(view){
- ["homeView","restaurantView","myDealsView"].forEach(id => {
+ ["homeView","restaurantView","myDealsView"].forEach(id=>{
   $(id).classList.toggle("hidden",id!==view);
  });
  $("navExplore").classList.toggle("active",view!=="myDealsView");
  $("navDeals").classList.toggle("active",view==="myDealsView");
  window.scrollTo(0,0);
 }
-
-function showHome(){
- navigate("homeView");
-}
+function showHome(){navigate("homeView")}
 
 function renderRestaurants(){
- $("restaurantGrid").innerHTML = Object.entries(restaurants).map(([key,r])=>`
+ $("restaurantGrid").innerHTML=Object.entries(restaurants).map(([key,r])=>`
  <div onclick="showRestaurant('${key}')" class="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer">
   <div class="h-44 relative">
    <img src="${r.banner}" alt="${escapeHTML(r.name)}" class="w-full h-full object-cover">
@@ -390,18 +873,17 @@ function renderRestaurants(){
 }
 
 function getRenewalDays(deal){
- return deal?.renewalDays ?? 14;
+ return deal?.renewalDays??14;
 }
-
 function getRenewalLabel(deal){
  return deal?.onceOnly
-  ? "Only once redeemable"
-  : "Renews every " + getRenewalDays(deal) + " days";
+  ?"Only once redeemable"
+  :"Renews every "+getRenewalDays(deal)+" days";
 }
 
 function showRestaurant(key){
- const r = restaurants[key];
- if(!r) return;
+ const r=restaurants[key];
+ if(!r)return;
  currentKey=key;
  $("restBanner").src=r.banner;
  $("restName").textContent=r.name;
@@ -411,25 +893,26 @@ function showRestaurant(key){
  $("restHours").textContent="Open • "+r.hours;
  $("restAddress").textContent=r.address;
  $("avgRatingNum").textContent=r.rating.split(" ")[0];
- $("totalRatingsCount").textContent=r.rating.match(/\((\d+)\)/)?.[1]+" ratings";
- $("restMapLink").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(r.address);
+ $("totalRatingsCount").textContent=
+  (r.rating.match(/\((\d+)\)/)?.[1]||"0")+" ratings";
+ $("restMapLink").href=
+  "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(r.address);
 
  $("restDeals").innerHTML=r.deals.map((d,i)=>`
-  <div class="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
-   <div>
-    <h3 class="text-lg font-bold">${escapeHTML(d.title)}</h3>
-    <p class="text-xs text-gray-500 mt-2">${escapeHTML(d.desc)}</p>
-    <div class="border-t mt-4 pt-3 space-y-2 text-xs font-medium text-gray-700">
-     <p>🎁 ${escapeHTML(d.save)}</p>
-     <p>🔄 ${escapeHTML(getRenewalLabel(d))}</p>
-     <p>📍 Eat on-site or takeaway</p>
-    </div>
+ <div class="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+  <div>
+   <h3 class="text-lg font-bold">${escapeHTML(d.title)}</h3>
+   <p class="text-xs text-gray-500 mt-2">${escapeHTML(d.desc)}</p>
+   <div class="border-t mt-4 pt-3 space-y-2 text-xs font-medium text-gray-700">
+    <p>🎁 ${escapeHTML(d.save)}</p>
+    <p>🔄 ${escapeHTML(getRenewalLabel(d))}</p>
+    <p>📍 Eat on-site or takeaway</p>
    </div>
-   <button onclick="bookDeal('${key}',${i})" class="w-full mt-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-bold text-sm">
-    Book DEAL
-   </button>
   </div>
- `).join("");
+  <button onclick="bookDeal('${key}',${i})" class="w-full mt-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-bold text-sm">
+   Book DEAL
+  </button>
+ </div>`).join("");
  navigate("restaurantView");
 }
 
@@ -439,8 +922,8 @@ function bookDeal(key,index){
  if(!d)return;
 
  const existing=dealHistory.find(x=>
-  x.restaurantKey===key &&
-  x.dealIndex===index &&
+  x.restaurantKey===key&&
+  x.dealIndex===index&&
   x.status==="booked"
  );
  if(existing){
@@ -458,9 +941,7 @@ function bookDeal(key,index){
    alert("This demo deal can only be redeemed once.");
    return;
   }
-
-  const renewalDays=getRenewalDays(d);
-  const remaining=renewalDays*86400000-(Date.now()-lastUsed.redeemedAt);
+  const remaining=getRenewalDays(d)*86400000-(Date.now()-lastUsed.redeemedAt);
   if(remaining>0){
    alert("This demo deal renews in "+Math.ceil(remaining/86400000)+" days.");
    return;
@@ -483,7 +964,6 @@ function showMyDeals(){
  navigate("myDealsView");
  renderMyDeals();
 }
-
 function switchDealsTab(tab){
  dealsTab=tab;
  renderMyDeals();
@@ -535,7 +1015,7 @@ function renderMyDeals(){
     <div class="grid grid-cols-3 gap-2 mb-5">
      <button onclick="showRestaurant('${item.restaurantKey}')" class="bg-white rounded-full py-3 text-xs font-bold text-orange-600">Contact</button>
      <button onclick="openNavigation('${item.restaurantKey}')" class="bg-white rounded-full py-3 text-xs font-bold text-orange-600">➤ Navigate</button>
-     <button onclick="shareDeal(${id})" class="bg-white rounded-full py-3 text-xs font-bold text-orange-600">♧ Share</button>
+     <button onclick='shareDeal(${id})' class="bg-white rounded-full py-3 text-xs font-bold text-orange-600">♧ Share</button>
     </div>
 
     <div class="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
@@ -575,12 +1055,13 @@ function cancelDeal(id){
  saveHistory();
  renderMyDeals();
 }
-
 function openNavigation(key){
  const r=restaurants[key];
- if(r)window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(r.address),"_blank","noopener");
+ if(r)window.open(
+  "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(r.address),
+  "_blank","noopener"
+ );
 }
-
 async function shareDeal(id){
  const item=dealHistory.find(x=>x.id===id);
  if(!item)return;
@@ -589,19 +1070,18 @@ async function shareDeal(id){
  if(!d)return;
  const message=r.name+" — "+d.title+" (Sikis Sokus demo)";
  if(navigator.share){
-  try{await navigator.share({title:"My deal",text:message});}
+  try{await navigator.share({title:"My deal",text:message})}
   catch(e){}
  }else if(navigator.clipboard){
-  try{await navigator.clipboard.writeText(message);alert("Copied!");}
-  catch(e){alert(message);}
+  try{await navigator.clipboard.writeText(message);alert("Copied!")}
+  catch(e){alert(message)}
  }else alert(message);
 }
-
 function reportProblem(){
  alert("This is a demo website. For problems with a real restaurant offer, contact the restaurant or the official provider.");
 }
 
-// ORIGINAL SWIPE-STYLE REDEMPTION
+/* ORIGINAL SWIPE REDEMPTION */
 function openDealModal(id){
  const item=dealHistory.find(x=>x.id===id&&x.status==="booked");
  if(!item)return;
@@ -621,7 +1101,6 @@ function openDealModal(id){
  resetSwipe();
  requestAnimationFrame(()=>$("dealModalContent").classList.add("active"));
 }
-
 function closeDealModal(){
  $("dealModalContent").classList.remove("active");
  setTimeout(()=>$("dealModal").classList.add("hidden"),300);
@@ -638,7 +1117,6 @@ swipeThumb.addEventListener("pointerdown",e=>{
  thumbLeft=swipeThumb.offsetLeft;
  swipeThumb.setPointerCapture(e.pointerId);
 });
-
 swipeThumb.addEventListener("pointermove",e=>{
  if(!isDragging)return;
  const maxX=swipeTrack.clientWidth-swipeThumb.clientWidth-6;
@@ -650,7 +1128,6 @@ swipeThumb.addEventListener("pointermove",e=>{
   triggerSuccess();
  }
 });
-
 swipeThumb.addEventListener("pointerup",()=>{
  if(!isDragging)return;
  isDragging=false;
@@ -660,10 +1137,24 @@ swipeThumb.addEventListener("pointercancel",()=>{
  isDragging=false;
  resetSwipe();
 });
-
 function resetSwipe(){
  swipeThumb.style.left="6px";
  swipeFill.style.width="0px";
+}
+
+/* NEW RATING LOGIC */
+const ratingCategories=[
+ {key:"food",icon:"♜",title:"Food",subtitle:"taste and portions"},
+ {key:"atmosphere",icon:"♧",title:"Atmosphere",subtitle:"the place"},
+ {key:"service",icon:"♙",title:"Service",subtitle:"helpfulness"}
+];
+const emojiFaces=["😞","🙁","🙂","😊","😍"];
+const ratingWords=["","poor","weak","good","great","excellent"];
+
+function parseMaxSavings(deal){
+ const text=String(deal?.save||"");
+ const matches=text.match(/\d[\d\s]*/);
+ return matches?Number(matches[0].replace(/\s/g,"")):90;
 }
 
 function triggerSuccess(){
@@ -673,26 +1164,241 @@ function triggerSuccess(){
  item.redeemedAt=Date.now();
  saveHistory();
  closeDealModal();
- selectedRating=0;
- rateStars(0);
- $("reviewText").value="";
- $("successModal").classList.remove("hidden");
-}
 
-function rateStars(stars){
- selectedRating=stars;
- $("starContainer").querySelectorAll("button").forEach((b,i)=>{
-  b.classList.toggle("text-amber-400",i<stars);
-  b.classList.toggle("text-gray-200",i>=stars);
- });
-}
-
-function completeRedemption(){
- $("successModal").classList.add("hidden");
+ currentRatingDealId=item.id;
  selectedDealId=null;
- selectedRating=0;
+ startRating(item.id,true);
+}
+
+function startRating(id,showToast=false){
+ const item=dealHistory.find(x=>x.id===id&&x.status==="redeemed");
+ if(!item)return;
+
+ currentRatingDealId=id;
+ ratingValues={food:0,atmosphere:0,service:0};
+ clearRatingPhotos();
+ $("reviewTextNew").value="";
+
+ const deal=restaurants[item.restaurantKey]?.deals[item.dealIndex];
+ ratingSavingsMax=parseMaxSavings(deal);
+ ratingSavings=ratingSavingsMax;
+ $("savingsSlider").max=ratingSavingsMax;
+ $("savingsSlider").value=ratingSavings;
+ $("savingsMax").textContent=ratingSavingsMax+" Kč";
+ $("savingsControl").classList.add("hidden");
+ $("savingsToggle").textContent="Was it less?";
+ updateSavings(ratingSavings);
+ renderRatingGroups();
+
+ $("thanksView").classList.add("hidden");
+ $("ratingView").classList.remove("hidden");
+ $("ratingView").scrollTop=0;
+ document.body.style.overflow="hidden";
+
+ if(showToast){
+  $("ratingToast").classList.remove("hidden");
+  setTimeout(()=>$("ratingToast").classList.add("hidden"),2400);
+ }
+}
+
+function renderRatingGroups(){
+ $("ratingGroups").innerHTML=ratingCategories.map(cat=>{
+  const selected=ratingValues[cat.key];
+  const subtitle=selected?ratingWords[selected]:cat.subtitle;
+  return `
+   <section class="rating-group">
+    <div class="rating-label">
+     <span class="rating-icon">${cat.icon}</span>
+     <span class="rating-name">${cat.title}</span>
+     <span class="rating-subtitle ${selected?"chosen":""}">${subtitle}</span>
+    </div>
+    <div class="emoji-track">
+     <div class="emoji-fill" style="width:${selected?(selected-1)*19.5:0}%"></div>
+     ${emojiFaces.map((face,i)=>{
+      const score=i+1;
+      const state=selected
+       ?score===selected?"selected":score<selected?"passed dimmed":"dimmed"
+       :"";
+      return `
+       <button
+        type="button"
+        aria-label="${cat.title} ${ratingWords[score]}"
+        aria-pressed="${score===selected}"
+        class="emoji-button ${state}"
+        onclick="selectEmoji('${cat.key}',${score})">
+        <span class="emoji-face">${face}</span>
+       </button>`;
+     }).join("")}
+    </div>
+   </section>`;
+ }).join("");
+
+ const count=Object.values(ratingValues).filter(Boolean).length;
+ $("ratingCount").textContent=count;
+ $("sendRatingBtn").disabled=count!==3;
+}
+
+function selectEmoji(category,score){
+ ratingValues[category]=score;
+ renderRatingGroups();
+}
+
+function toggleSavings(){
+ const hidden=$("savingsControl").classList.toggle("hidden");
+ $("savingsToggle").textContent=hidden?"Was it less?":"Hide";
+}
+function updateSavings(value){
+ ratingSavings=Number(value);
+ $("savedAmountLabel").textContent=ratingSavings+" Kč";
+ $("savingsValue").textContent=ratingSavings+" Kč";
+}
+
+function openPhotoSheet(){
+ if(ratingPhotos.length>=5){
+  alert("You can add up to 5 photos.");
+  return;
+ }
+ $("remainingPhotos").textContent=5-ratingPhotos.length;
+ $("photoSheet").classList.remove("hidden");
+}
+function closePhotoSheet(event){
+ if(event&&event.target!==$("photoSheet"))return;
+ $("photoSheet").classList.add("hidden");
+}
+function choosePhoto(source){
+ closePhotoSheet();
+ const input=$(source==="camera"?"cameraInput":"photoInput");
+ input.value="";
+ input.click();
+}
+function handlePhotos(files){
+ const remaining=5-ratingPhotos.length;
+ const selected=Array.from(files).slice(0,remaining);
+ for(const file of selected){
+  if(!file.type.startsWith("image/"))continue;
+  ratingPhotos.push(file);
+  ratingPhotoURLs.push(URL.createObjectURL(file));
+ }
+ renderPhotoPreviews();
+}
+function renderPhotoPreviews(){
+ $("photoPreviews").innerHTML=ratingPhotoURLs.map((url,i)=>`
+  <div class="photo-preview">
+   <img src="${url}" alt="Review photo">
+   <button onclick="removeRatingPhoto(${i})" aria-label="Remove photo">×</button>
+  </div>`).join("");
+}
+function removeRatingPhoto(index){
+ URL.revokeObjectURL(ratingPhotoURLs[index]);
+ ratingPhotoURLs.splice(index,1);
+ ratingPhotos.splice(index,1);
+ renderPhotoPreviews();
+}
+function clearRatingPhotos(){
+ ratingPhotoURLs.forEach(url=>URL.revokeObjectURL(url));
+ ratingPhotoURLs=[];
+ ratingPhotos=[];
+ $("photoPreviews").innerHTML="";
+}
+
+function submitRating(){
+ if(Object.values(ratingValues).filter(Boolean).length!==3)return;
+ const item=dealHistory.find(x=>x.id===currentRatingDealId);
+ if(!item)return;
+
+ item.rating={
+  food:ratingValues.food,
+  atmosphere:ratingValues.atmosphere,
+  service:ratingValues.service,
+  comment:$("reviewTextNew").value.trim(),
+  photoCount:ratingPhotos.length,
+  submittedAt:Date.now()
+ };
+ item.savedAmount=ratingSavings;
+ saveHistory();
+ clearRatingPhotos();
+ showThanks(item);
+}
+
+function rateLater(){
+ const item=dealHistory.find(x=>x.id===currentRatingDealId);
+ if(item){
+  item.savedAmount=ratingSavings;
+  saveHistory();
+ }
+ clearRatingPhotos();
+ $("ratingView").classList.add("hidden");
+ currentRatingDealId=null;
+ document.body.style.overflow="";
  dealsTab="redeemed";
  showMyDeals();
+}
+
+function showThanks(item){
+ const restaurant=restaurants[item.restaurantKey];
+ $("ratingView").classList.add("hidden");
+ $("ratingToast").classList.add("hidden");
+ $("thanksRestaurantName").textContent=restaurant?.name||"this restaurant";
+
+ const rated=dealHistory.filter(x=>x.rating?.submittedAt);
+ const totalSaved=dealHistory
+  .filter(x=>x.status==="redeemed")
+  .reduce((sum,x)=>sum+(Number(x.savedAmount)||0),0);
+
+ $("totalRatingsStat").textContent=rated.length;
+ $("totalSavingsStat").textContent=totalSaved.toLocaleString("cs-CZ");
+ showAllPending=false;
+ renderPendingRatings();
+ $("thanksView").classList.remove("hidden");
+ $("thanksView").scrollTop=0;
+}
+
+function renderPendingRatings(){
+ const pending=dealHistory.filter(x=>
+  x.status==="redeemed"&&!x.rating?.submittedAt&&restaurants[x.restaurantKey]
+ );
+ $("pendingCount").textContent=pending.length;
+ const visible=showAllPending?pending:pending.slice(0,2);
+
+ $("pendingRatingsList").innerHTML=visible.map(item=>{
+  const r=restaurants[item.restaurantKey];
+  const id=JSON.stringify(item.id);
+  return `
+   <div class="pending-card">
+    <img src="${r.banner}" alt="${escapeHTML(r.name)}">
+    <div class="pending-card-details">
+     <strong>${escapeHTML(r.name)}</strong>
+     <small>Redeemed on ${formatDate(item.redeemedAt)}</small>
+    </div>
+    <button onclick='startRating(${id})'>Rate</button>
+   </div>`;
+ }).join("");
+
+ if(!pending.length){
+  $("pendingRatingsList").innerHTML=
+   '<p class="text-gray-500 text-sm py-3">All your redeemed deals are rated.</p>';
+ }
+}
+
+function showAllPendingRatings(){
+ showAllPending=!showAllPending;
+ renderPendingRatings();
+}
+
+function finishThanks(){
+ $("thanksView").classList.add("hidden");
+ currentRatingDealId=null;
+ document.body.style.overflow="";
+ dealsTab="redeemed";
+ showMyDeals();
+}
+
+/* Keep compatibility with previous rating functions */
+function rateStars(stars){
+ selectedRating=stars;
+}
+function completeRedemption(){
+ rateLater();
 }
 
 renderRestaurants();
